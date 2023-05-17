@@ -1,17 +1,10 @@
-#include<stdio.h>
+#include "criptografia.h"
 
-unsigned char* encrypt(unsigned char* msg);
-unsigned char encrypt_uc(unsigned char char);
-int main(){
-    return 0;
-}
-unsigned char* encrypt(unsigned char* msg){
+void encrypt(unsigned char* msg, int key){
     int msg_size = strlen(msg);
-    unsigned char encrypted_msg[msg_size];
-    
-
-
+    for(int i = 0;i<msg_size;i++) msg[i]=(msg[i]+key);
 }
-unsigned char encrypt_uc(unsigned char char){
-    unsigned char letters[255]; 
+void decrypt(unsigned char* msg, int key){
+    int msg_size = strlen(msg);
+    for(int i =0;i<msg_size;i++) msg[i] = (msg[i]-key).
 }

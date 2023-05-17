@@ -1,4 +1,6 @@
 #include "include.h"
+#include "criptografia.h"
+
 #define MAXCHAR 200
 #define MAXBUFFER MAXCHAR*8
 
@@ -72,11 +74,12 @@ int main(int argc, char *argv[]){
         e envia para o servidor que fará o processo inverso.*/
         if(FD_ISSET(0, &reads)){
             unsigned char read[MAXBUFFER];
-            printf("\nDigite a mensagem: ");
+            printf("\nDigite a mensagem (max %d caracteres): ", MAXCHAR);
             if(!fgets(read, 4096, stdin)) break;
             printf("Mensagem original: %s", read);
+            encrypt(read, 1);
+            printf("Mensagem criptografada: %s", read);
             
-
             int bytes_sent = send(socket_peer, read, strlen(read), 0);
 
         }
