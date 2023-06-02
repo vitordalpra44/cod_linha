@@ -1,17 +1,14 @@
 #include "include.h"
-#include "criptografia.h"
-
-#define MAXCHAR 200
-#define MAXBUFFER MAXCHAR*8
+#include "func.h"
 
 int main(int argc, char *argv[]){
 
     if(argc<3){
-        fprintf(stderr, "usage: tcp_client hostname port\n");
+        fprintf(stderr, "Formato: ./tcp_client IP PORTA\n");
         return 1;
     }
 
-    //Bloco que configura o endereço remoto...
+    //Bloco que configura o endereço remoto
     struct addrinfo hints;
     memset(&hints, 0, sizeof(hints));
     hints.ai_socktype = SOCK_STREAM;
@@ -58,13 +55,13 @@ int main(int argc, char *argv[]){
 
         //Recebendo dados do servidor
         if(FD_ISSET(socket_peer, &reads)){
-            unsigned char read[MAXBUFFER];
-            int bytes_received = recv(socket_peer, read, MAXBUFFER, 0);
+            unsigned char msg[MAXBUFFER];
+            int bytes_received = recv(socket_peer, msg, MAXBUFFER, 0);
             if (bytes_received<1){
                 printf("Conexão interrompida pelo peer\n");
                 break;
             }
-            printf("\n%.*s",bytes_received, read);
+            printf("\n%.*s",bytes_received, msg);
         }
 
 
@@ -73,20 +70,28 @@ int main(int argc, char *argv[]){
          criptografa, transforma em bits, faz a codificação de linha AMI,
         e envia para o servidor que fará o processo inverso.*/
         if(FD_ISSET(0, &reads)){
-            unsigned char read[MAXBUFFER];
+            unsigned char msg[MAXBUFFER];
+            char ami_msg[MAXBUFFER];
+            int msg_size=0;
             printf("\nDigite a mensagem (max %d caracteres): ", MAXCHAR);
-            if(!fgets(read, 4096, stdin)) break;
-            printf("Mensagem original: %s", read);
-            encrypt(read, 1);
-            printf("Mensagem criptografada: %s", read);
-            
-            int bytes_sent = send(socket_peer, read, strlen(read), 0);
-
+            if(!fgets(msg, MAXBUFFER, stdin));
+            printf("\nMensagem original: %s", msg);
+            encrypt(msg, 1);
+            printf("\nMensagem criptografada: %s", msg);
+            msg_size = strlen(msg)-1;
+            printf("\nMensagem criptografada em binário:");
+            printBin(msg, msg_size);
+            amiCode(msg, ami_msg, msg_size);
+            printf("\nMensagem criptografada e codificada AMI:");
+            printAMI(ami_msg);
+            int bytes_sent = send(socket_peer, ami_msg, msg_size*8 + 8, 0); //Esse tamanho é o tamanho da msg_ami + o '@' condição de fim de string
         }
     }
 
     //Fechando socket
     CLOSESOCKET(socket_peer);
     printf("\nEncerrado\n");
+
     return 0;
+    
 }

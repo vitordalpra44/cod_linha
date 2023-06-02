@@ -15,3 +15,6 @@
 #include<string.h>
 #include<time.h>
 #include <stdio_ext.h>
+
+#define MAXCHAR 200
+#define MAXBUFFER MAXCHAR*8
