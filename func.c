@@ -50,24 +50,22 @@ void amiCode(unsigned char* msg, char* ami_msg, int msg_size) {
 }
 
 void amiDecode(char* ami_msg, int msg_size, unsigned char* msg) {
-    int i, j;
-    int binary[8];
-    
+    int i=0, j=0, a=0, cont=0;
+    char binary[msg_size*8];
     // Decodificar valores AMI para binário
-    for (i = 0; i < 8; i++) {
+    for (i = 0; i < msg_size*8; i++) {
         binary[i] = ami_msg[i];
         if (binary[i] == -1)
             binary[i] = 1;
     }
-    
+
     // Converter binário para decimal
-    unsigned char asciiValue = 0;
-    for (i = 0; i < 8; i++) {
-        asciiValue <<= 1; // Deslocar bits para a esquerda
-        asciiValue |= binary[i];
+    for (i = 0; i < msg_size; i++) {
+        for(j=i*8, a = 128;j<=i*8+7;j++, a/=2){
+            msg[cont] +=a*binary[j];
+        }
+        cont++;
     }
-    
-    return asciiValue;
 }
 
 void printAMI(char* msg) {
@@ -76,3 +74,4 @@ void printAMI(char* msg) {
     }
     printf("\n");
 }
+

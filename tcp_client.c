@@ -34,8 +34,11 @@ int main(int argc, char *argv[]){
         fprintf(stderr, "Conexão falhou. (%d)", GETSOCKETERRNO());
         return 1;
     }
-    freeaddrinfo(peer_address);
     printf("Conectado...");
+    printf("\nDigite a mensagem: ");
+    fflush(stdout);
+    freeaddrinfo(peer_address);
+
     
     
 
@@ -73,7 +76,6 @@ int main(int argc, char *argv[]){
             unsigned char msg[MAXBUFFER];
             char ami_msg[MAXBUFFER];
             int msg_size=0;
-            printf("\nDigite a mensagem (max %d caracteres): ", MAXCHAR);
             if(!fgets(msg, MAXBUFFER, stdin));
             printf("\nMensagem original: %s", msg);
             encrypt(msg, 1);

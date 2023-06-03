@@ -72,8 +72,8 @@ int main(){
 
                 
                 }else{
-                    char msg_ami[MAXBUFFER];
-                    unsigned char msg[MAXBUFFER];
+                    char msg_ami[MAXBUFFER]={0};
+                    unsigned char msg[MAXBUFFER]={0};
                     int ami_msg_size=0;
                     ami_msg_size= recv(i, msg_ami, MAXBUFFER, 0);
                     if(ami_msg_size<1){
@@ -82,21 +82,16 @@ int main(){
                         continue;
                     }
                     ami_msg_size -=1; //Tirando o '@' do final
-                    printf("\nMensagem criptografada e codificada AMI:");
-                    printAMI(ami_msg);
-                    amiDecode(msg, ami_msg, ami_msg_size);
-                    printf("\nMensagem criptografada em binário:");
-                    printBin(msg, ami_msg_size);
+                    printf("\n\n");
+                    printf("Mensagem criptografada e codificada AMI:");
+                    printAMI(msg_ami);
+                    amiDecode(msg_ami, ami_msg_size/8, msg);
+                    printf("Mensagem criptografada em binário:");
+                    printBin(msg, ami_msg_size/8);
+                    printf("Mensagem criptografada: %s", msg);
                     decrypt(msg, 1);
-                    printf("\nDigite a mensagem (max %d caracteres): ", MAXCHAR);
-                    if(!fgets(msg, MAXBUFFER, stdin));
                     printf("\nMensagem original: %s", msg);
-                    encrypt(msg, 1);
-                    printf("\nMensagem criptografada: %s", msg);
-
-
-
-                    send(i, read, bytes_received,0);
+                    fflush(stdout);
                 }
 
             }
