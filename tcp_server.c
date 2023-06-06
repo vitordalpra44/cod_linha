@@ -18,6 +18,12 @@ int main(){
     SOCKET socket_listen;
     socket_listen = socket(bind_address->ai_family,
                             bind_address->ai_socktype, bind_address->ai_protocol);
+    // Configurar a opção SO_REUSEADDR
+    int reuse = 1;
+    if (setsockopt(socket_listen, SOL_SOCKET, SO_REUSEADDR, &reuse, sizeof(reuse)) < 0) {
+        perror("Erro ao configurar SO_REUSEADDR");
+        return 1;
+    }
     if(!ISVALIDSOCKET(socket_listen)){
         fprintf(stderr, "Socket falhou (%d)", GETSOCKETERRNO());
         return 1;
@@ -81,7 +87,7 @@ int main(){
                         CLOSESOCKET(i);
                         continue;
                     }
-                    ami_msg_size -=1; //Tirando o '@' do final
+                    ami_msg_size -=8; //Tirando o '@' do final
                     printf("\n\n");
                     printf("Mensagem criptografada e codificada AMI:");
                     printAMI(msg_ami);
@@ -92,6 +98,8 @@ int main(){
                     decrypt(msg, 1);
                     printf("\nMensagem original: %s", msg);
                     fflush(stdout);
+                    if(saveFile(msg_ami, ami_msg_size)) return 1;
+                    if(gnuPlot()) return 1;
                 }
 
             }

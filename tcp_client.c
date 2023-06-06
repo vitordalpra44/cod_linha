@@ -86,6 +86,8 @@ int main(int argc, char *argv[]){
             amiCode(msg, ami_msg, msg_size);
             printf("\nMensagem criptografada e codificada AMI:");
             printAMI(ami_msg);
+            if(saveFile(ami_msg, msg_size*8)) return 1;
+            if(gnuPlot()) return 1;
             int bytes_sent = send(socket_peer, ami_msg, msg_size*8 + 8, 0); //Esse tamanho é o tamanho da msg_ami + o '@' condição de fim de string
         }
     }
