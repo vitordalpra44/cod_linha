@@ -91,7 +91,7 @@ int saveFile(char* msg, int msg_size){
 }
 int gnuPlot(){
     FILE *pipe;
-    char *gnuplot_commands[] = {"set term x11", "set yrange [-10:10]", "set grid y", "set ytics 1","plot 'data.txt' with steps", "pause -1"};
+    char *gnuplot_commands[] = {"set terminal png", "set output 'output.png'", "set yrange [-10:10]", "set grid y", "set ytics 1","plot 'data.txt' with steps", "pause -1"};
     int num_commands = sizeof(gnuplot_commands) / sizeof(char *);
 
     // Abrir um pipe para o Gnuplot
@@ -104,10 +104,11 @@ int gnuPlot(){
 
     // Enviar comandos para o Gnuplot
     for (int i = 0; i < num_commands; i++) {
-        fprintf(pipe, "%s\n", gnuplot_commands[i]);
+       fprintf(pipe, "%s\n", gnuplot_commands[i]);
     }
 
     // Fechar o pipe
     pclose(pipe);
+    system("xdg-open output.png");
     return 0;
 }
